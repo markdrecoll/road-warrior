@@ -9,7 +9,7 @@ export type Row =
     }
     | {
         type: "car";
-        direction: "boolean";
+        direction: boolean;
         speed: number;
         vehicles: {
             initialTileIndex: number;
@@ -18,7 +18,7 @@ export type Row =
     }
     | {
         type: "truck";
-        direction: "boolean";
+        direction: boolean;
         speed: number;
         vehicles: {
             initialTileIndex: number;

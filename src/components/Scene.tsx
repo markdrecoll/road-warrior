@@ -1,4 +1,5 @@
 import { Canvas } from "@react-three/fiber"
+import { DirectionalLight } from "./DirectionalLight"
 
 export const Scene = ({ children }: { children: React.ReactNode }) => {
 	return (
@@ -10,7 +11,7 @@ export const Scene = ({ children }: { children: React.ReactNode }) => {
 			}}
 		>
 			<ambientLight />
-			<directionalLight position={[-100, -100, 200]} />
+			<DirectionalLight />
 				{children}
         </Canvas>
 	)
