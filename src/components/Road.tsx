@@ -8,7 +8,7 @@ type Props = {
 export const Road = ({ rowIndex, children }: Props) => {
     return (
         <group position-y={rowIndex * tileSize}>
-            <mesh>
+            <mesh receiveShadow>
                 <boxGeometry args={[tilesPerRow * tileSize, tileSize]} />
                 <meshLambertMaterial color={0x45a59} flatShading />
             </mesh>
