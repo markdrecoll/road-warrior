@@ -12,7 +12,6 @@ export const Scene = ({ children }: { children: React.ReactNode }) => {
 			}}
 		>
 			<ambientLight />
-			<DirectionalLight />
 				{children}
         </Canvas>
 	)
