@@ -1,5 +1,4 @@
 import { Canvas } from "@react-three/fiber"
-import { DirectionalLight } from "./DirectionalLight"
 
 export const Scene = ({ children }: { children: React.ReactNode }) => {
 	return (
