@@ -7,12 +7,14 @@ export default function useVehicleAnimation(
     direction: boolean,
     speed: number
 ) {
-    useFrame((state, delta) => {
+    useFrame((_, delta) => {
         if (!ref.current) return;
         const vehicle = ref.current;
 
-        const beginningOfRow = (minTileIndex - 2) * tileSize;
-        const endOfRow = (maxTileIndex + 2) * tileSize;
+        // Extend slightly beyond playable area so vehicles don't disappear abruptly,
+        // but not too far so they can loop back quickly
+        const beginningOfRow = (minTileIndex - 8) * tileSize; // 8 tiles beyond playable area
+        const endOfRow = (maxTileIndex + 8) * tileSize; // 8 tiles beyond playable area
 
         if (direction) {
             vehicle.position.x =

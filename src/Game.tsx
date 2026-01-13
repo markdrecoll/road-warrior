@@ -6,7 +6,7 @@ import { Controls } from "./components/Controls";
 import { Result } from "./components/Result";
 import "./styles/Game.css";
 
-export const Game = () => {
+const Game = () => {
 	return (
 		<div className="game">
 			<Scene>
@@ -19,3 +19,5 @@ export const Game = () => {
 		</div>
 	)
 }
+
+export default Game;

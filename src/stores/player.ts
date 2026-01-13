@@ -17,6 +17,10 @@ export const state: {
 };
 
 export function queueMove(direction: MoveDirection) {
+    // Prevent movement if game is over
+    const gameStatus = useGameStore.getState().status;
+    if (gameStatus === "gameover") return;
+
     const isValidMove = endsUpInValidPosition(
         { rowIndex: state.currentRow, tileIndex: state.currentTile },
         [...state.movesQueue, direction]

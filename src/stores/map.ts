@@ -8,16 +8,17 @@ interface StoreState {
     reset: () => void;
 }
 
-const useStore = create<StoreState>((set) => ({
-    rows: generateRows(20),
+const useStore = create<StoreState>((set, get) => ({
+    rows: generateRows(20, 0), // Start from row index 0
     addRows: () => {
-        const newRows = generateRows(20);
+        const currentRowCount = get().rows.length;
+        const newRows = generateRows(20, currentRowCount);
         set((state) => ({
             rows: [...state.rows, ...newRows],
         }));
     },
     reset: () => {
-        set({ rows: generateRows(20) });
+        set({ rows: generateRows(20, 0) }); // Reset from row index 0
     }
 }));
 

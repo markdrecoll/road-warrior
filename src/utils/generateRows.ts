@@ -2,18 +2,22 @@ import * as THREE from "three";
 import { minTileIndex, maxTileIndex } from "../constants";
 import { type Row, type RowType } from "../types";
 
-export function generateRows(amount: number): Row[] {
+export function generateRows(amount: number, startingRowIndex: number = 0): Row[] {
     const rows: Row[] = [];
+    const pattern: RowType[] = ["car", "truck", "forest"];
+    
     for (let i = 0; i < amount; i++) {
-        const rowData = generateRow();
+        const actualRowIndex = startingRowIndex + i;
+        const typeIndex = actualRowIndex % pattern.length;
+        const type = pattern[typeIndex];
+        const rowData = generateRow(type, actualRowIndex);
         rows.push(rowData);
     }
     return rows;
 
-    function generateRow(): Row {
-        const type: RowType = randomElement(["forest", "car", "truck"]);
-        if (type === "car") return generateCarLaneMetaData();
-        if (type === "truck") return generateTruckLaneMetaData();
+    function generateRow(type: RowType, rowIndex: number): Row {
+        if (type === "car") return generateCarLaneMetaData(rowIndex);
+        if (type === "truck") return generateTruckLaneMetaData(rowIndex);
         return generateForestMetaData();
     }
 
@@ -36,12 +40,15 @@ export function generateRows(amount: number): Row[] {
         return { type: "forest", trees };
     }
 
-    function generateCarLaneMetaData(): Row {
+    function generateCarLaneMetaData(rowIndex: number): Row {
         const direction = randomElement([true, false]);
-        const speed = randomElement([125, 156, 188]);
+        // Progressive speed: starts at 50, increases by 10 every row, caps at 250
+        const baseSpeed = 50;
+        const speedIncrease = Math.floor(rowIndex / 2) * 10; // Increase every 2nd row
+        const speed = Math.min(baseSpeed + speedIncrease, 250);
 
         const occupiedTiles = new Set<number>();
-        const vehicles = Array.from({ length: 3 }, () => {
+        const vehicles = Array.from({ length: 5 }, () => {
             let initialTileIndex;
             do {
                 initialTileIndex = THREE.MathUtils.randInt(minTileIndex, maxTileIndex);
@@ -67,13 +74,16 @@ export function generateRows(amount: number): Row[] {
         return { type: "car", direction, speed, vehicles };
     }
 
-    function generateTruckLaneMetaData(): Row {
+    function generateTruckLaneMetaData(rowIndex: number): Row {
         const direction = randomElement([true, false]);
-        const speed = randomElement([125, 156, 188]);
+        // Progressive speed for trucks: starts at 40, increases by 8 every row, caps at 200
+        const baseSpeed = 40;
+        const speedIncrease = Math.floor(rowIndex / 2) * 8; // Increase every 2nd row
+        const speed = Math.min(baseSpeed + speedIncrease, 200);
 
         const occupiedTiles = new Set<number>();
 
-        const vehicles = Array.from({ length: 2 }, () => {
+        const vehicles = Array.from({ length: 3 }, () => {
             let initialTileIndex;
             do {
                 initialTileIndex = THREE.MathUtils.randInt(minTileIndex, maxTileIndex);
