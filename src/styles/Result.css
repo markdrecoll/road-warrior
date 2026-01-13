@@ -1,4 +1,4 @@
-#result-container {
+.road-warrior-game #result-container {
     position: absolute;
     min-width: 100%;
     min-height: 100%;
@@ -6,20 +6,20 @@
     align-items: center;
     justify-content: center;
     top: 0;
+}
 
-    #result {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        background-color: rgba(255, 255, 255, 0.7);
-        padding: 20px;
-    }
+.road-warrior-game #result-container #result {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 20px;
+}
 
-    button {
-        background-color: darkred;
-        padding: 20px 50px 20px 50px;
-        font-family: inherit;
-        font-size: inherit;
-        cursor: pointer;
-    }
+.road-warrior-game #result-container button {
+    background-color: darkred;
+    padding: 20px 50px 20px 50px;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
 }

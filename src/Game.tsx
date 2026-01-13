@@ -8,7 +8,7 @@ import "./styles/Game.css";
 
 const Game = () => {
 	return (
-		<div className="game">
+		<div className="road-warrior-game">
 			<Scene>
 				<Player />
 				<Map />
