@@ -48,28 +48,49 @@ export function generateRows(amount: number, startingRowIndex: number = 0): Row[
         const speed = Math.min(baseSpeed + speedIncrease, 250);
 
         const occupiedTiles = new Set<number>();
-        const vehicles = Array.from({ length: 5 }, () => {
-            let initialTileIndex;
-            do {
-                initialTileIndex = THREE.MathUtils.randInt(minTileIndex, maxTileIndex);
-            } while (occupiedTiles.has(initialTileIndex));
-
-            // make the vehicle's tiles occupied
-            occupiedTiles.add(initialTileIndex - 1);
-            occupiedTiles.add(initialTileIndex);
-            occupiedTiles.add(initialTileIndex + 1);
-
-            const color: THREE.ColorRepresentation = randomElement([
-                0xff0000,
-                0x00ff00,
-                0x0000ff,
-                0xffff00,
-                0xff00ff,
-                0x00ffff
-            ]);
-
-            return { initialTileIndex, color };
-        });
+        const vehicles: { initialTileIndex: number; color: THREE.ColorRepresentation }[] = [];
+        
+        // Try to place 5 vehicles with proper spacing
+        const maxAttempts = 50; // Prevent infinite loops
+        const targetVehicles = 5;
+        
+        for (let i = 0; i < targetVehicles; i++) {
+            let attempts = 0;
+            let validPosition = false;
+            
+            while (!validPosition && attempts < maxAttempts) {
+                const initialTileIndex = THREE.MathUtils.randInt(minTileIndex, maxTileIndex);
+                
+                // Check if this position and surrounding tiles (including gap) are free
+                let canPlace = true;
+                for (let offset = -3; offset <= 3; offset++) { // Car takes 3 tiles + 1 tile gap on each side
+                    if (occupiedTiles.has(initialTileIndex + offset)) {
+                        canPlace = false;
+                        break;
+                    }
+                }
+                
+                if (canPlace) {
+                    // Mark tiles as occupied (car + buffer space)
+                    for (let offset = -2; offset <= 2; offset++) { // Mark wider area to ensure spacing
+                        occupiedTiles.add(initialTileIndex + offset);
+                    }
+                    
+                    const color: THREE.ColorRepresentation = randomElement([
+                        0xff0000,
+                        0x00ff00,
+                        0x0000ff,
+                        0xffff00,
+                        0xff00ff,
+                        0x00ffff
+                    ]);
+                    
+                    vehicles.push({ initialTileIndex, color });
+                    validPosition = true;
+                }
+                attempts++;
+            }
+        }
 
         return { type: "car", direction, speed, vehicles };
     }
@@ -82,31 +103,49 @@ export function generateRows(amount: number, startingRowIndex: number = 0): Row[
         const speed = Math.min(baseSpeed + speedIncrease, 200);
 
         const occupiedTiles = new Set<number>();
-
-        const vehicles = Array.from({ length: 3 }, () => {
-            let initialTileIndex;
-            do {
-                initialTileIndex = THREE.MathUtils.randInt(minTileIndex, maxTileIndex);
-            } while (occupiedTiles.has(initialTileIndex));
-
-            // make the vehicle's tiles occupied
-            occupiedTiles.add(initialTileIndex - 2);
-            occupiedTiles.add(initialTileIndex - 1);
-            occupiedTiles.add(initialTileIndex);
-            occupiedTiles.add(initialTileIndex + 1);
-            occupiedTiles.add(initialTileIndex + 2);
-
-            const color: THREE.ColorRepresentation = randomElement([
-                0xff0000,
-                0x00ff00,
-                0x0000ff,
-                0xffff00,
-                0xff00ff,
-                0x00ffff
-            ]);
-
-            return { initialTileIndex, color };
-        });
+        const vehicles: { initialTileIndex: number; color: THREE.ColorRepresentation }[] = [];
+        
+        // Try to place 3 trucks with proper spacing
+        const maxAttempts = 50; // Prevent infinite loops
+        const targetVehicles = 3;
+        
+        for (let i = 0; i < targetVehicles; i++) {
+            let attempts = 0;
+            let validPosition = false;
+            
+            while (!validPosition && attempts < maxAttempts) {
+                const initialTileIndex = THREE.MathUtils.randInt(minTileIndex + 3, maxTileIndex - 3); // Keep trucks away from edges
+                
+                // Check if this position and surrounding tiles (including gap) are free
+                let canPlace = true;
+                for (let offset = -4; offset <= 4; offset++) { // Truck takes 5 tiles + 1 tile gap on each side
+                    if (occupiedTiles.has(initialTileIndex + offset)) {
+                        canPlace = false;
+                        break;
+                    }
+                }
+                
+                if (canPlace) {
+                    // Mark tiles as occupied (truck + buffer space)
+                    for (let offset = -3; offset <= 3; offset++) { // Mark wider area to ensure spacing
+                        occupiedTiles.add(initialTileIndex + offset);
+                    }
+                    
+                    const color: THREE.ColorRepresentation = randomElement([
+                        0xff0000,
+                        0x00ff00,
+                        0x0000ff,
+                        0xffff00,
+                        0xff00ff,
+                        0x00ffff
+                    ]);
+                    
+                    vehicles.push({ initialTileIndex, color });
+                    validPosition = true;
+                }
+                attempts++;
+            }
+        }
 
         return { type: "truck", direction, speed, vehicles };
     }
